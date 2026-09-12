@@ -13,6 +13,72 @@ const FIBI_STORAGE_KEY =
 let conversationId =
   localStorage.getItem(FIBI_STORAGE_KEY) || null;
 
+const FIBI_HISTORY_KEY =
+  FIBI_LANGUAGE === "en-US"
+    ? "fibi_history_en"
+    : "fibi_history_pt";
+
+let fibiHistory = [];
+
+try {
+  const savedHistory =
+    JSON.parse(
+      localStorage.getItem(FIBI_HISTORY_KEY) || "[]"
+    );
+
+  if (Array.isArray(savedHistory)) {
+    fibiHistory =
+      savedHistory
+        .filter((item) => {
+          return (
+            item &&
+            (item.role === "user" ||
+              item.role === "assistant") &&
+            typeof item.content === "string"
+          );
+        })
+        .slice(-10);
+  }
+} catch (error) {
+  console.warn(
+    "Nao foi possivel carregar o historico da Fibi.",
+    error
+  );
+
+  fibiHistory = [];
+}
+
+function saveFibiHistory() {
+  try {
+    localStorage.setItem(
+      FIBI_HISTORY_KEY,
+      JSON.stringify(fibiHistory.slice(-10))
+    );
+  } catch (error) {
+    console.warn(
+      "Nao foi possivel salvar o historico da Fibi.",
+      error
+    );
+  }
+}
+
+function addFibiHistory(userMessage, assistantMessage) {
+  fibiHistory.push(
+    {
+      role: "user",
+      content: String(userMessage || "")
+    },
+    {
+      role: "assistant",
+      content: String(assistantMessage || "")
+    }
+  );
+
+  fibiHistory = fibiHistory.slice(-10);
+
+  saveFibiHistory();
+}
+
 let busy = false;
 
 // ========================================
@@ -33,6 +99,14 @@ function fibiApiUrl(path) {
     String(path || "").startsWith("/")
       ? String(path || "")
       : `/${String(path || "")}`;
+
+  const isLocal =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
+  if (isLocal) {
+    return normalizedPath;
+  }
 
   return FIBI_API_BASE
     ? `${FIBI_API_BASE}${normalizedPath}`
@@ -2730,14 +2804,15 @@ async function sendFibiMessage(
 
           body:
             JSON.stringify({
-
               conversationId,
+
+              history:
+                fibiHistory.slice(-10),
 
               message:
                 createFibiApiMessage(
                   message
                 )
-
             })
 
         }
@@ -2778,6 +2853,11 @@ async function sendFibiMessage(
     localStorage.setItem(
       FIBI_STORAGE_KEY,
       conversationId
+    );
+
+    addFibiHistory(
+      message,
+      data.answer
     );
 
 
@@ -2948,6 +3028,12 @@ async function clearFibiConversation() {
 
   localStorage.removeItem(
     FIBI_STORAGE_KEY
+  );
+
+  fibiHistory = [];
+
+  localStorage.removeItem(
+    FIBI_HISTORY_KEY
   );
 
 

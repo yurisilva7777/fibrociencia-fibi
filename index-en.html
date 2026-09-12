@@ -8,7 +8,7 @@
 <title>FibroCiência | Research and Awareness</title>
 <meta name="theme-color" content="#5425b8"/>
 <meta name="robots" content="index,follow"/>
-<meta name="fibi-api-base" content=""/>
+<meta name="fibi-api-base" content="https://fibi-api.yurijesse6.workers.dev"/>
 <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
         .hero-imagem {
@@ -5180,6 +5180,25 @@ img[alt="Iohran Miguel Gallinari"] {
         display: none;
     }
 }
+/* =========================================
+   OTIMIZAÇÃO DE ROLAGEM — METODOLOGIA
+========================================= */
+
+.metodologia .etapa {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.09),
+            rgba(255, 255, 255, 0.055)
+        ) !important;
+
+    box-shadow:
+        0 10px 24px
+        rgba(0, 0, 0, 0.08) !important;
+}
 </style>
 <style>.language-switcher .lang-button{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;}</style><style>.ficha::before{content:"RESEARCH PROJECT" !important;}</style></head>
 <body>
@@ -6321,6 +6340,33 @@ img[alt="Iohran Miguel Gallinari"] {
     }
 
 }
+
+
+/* FIBI_SCROLL_OPT_START */
+
+/* Otimizacao de rolagem - metodologia */
+.metodologia .etapa {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.09),
+            rgba(255, 255, 255, 0.055)
+        ) !important;
+
+    box-shadow:
+        0 10px 24px
+        rgba(0, 0, 0, 0.08) !important;
+}
+
+.metodologia .etapa:last-child {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+/* FIBI_SCROLL_OPT_END */
 
 </style>
 <script src="./fibi-widget.js?v=4" type="module"></script>
